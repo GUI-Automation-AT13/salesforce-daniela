@@ -8,7 +8,7 @@ import static configuration.ConfigurationFile.getEnvVariables;
 
 public class Login extends BaseTest {
 
-    @Test
+//    @Test
     public void testLoginInTheWebPage() {
         HomePage homePage = loginPage.setUserName(getEnvVariables("USER"))
                 .setPassword(getEnvVariables("PASSWORD"))
