@@ -18,8 +18,8 @@ public class LegalEntityPage extends BasePage {
     @FindBy(css = ".slds-theme--success")
     private WebElement successMessage;
 
-    public LegalEntityPage(WebDriver driver) {
-        super(driver);
+    public LegalEntityPage() {
+        super();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class LegalEntityPage extends BasePage {
      */
     public NewLegalEntityPage clickNewBtn() {
         newEntityBtn.click();
-        return new NewLegalEntityPage(driver);
+        return new NewLegalEntityPage();
     }
 
     /**

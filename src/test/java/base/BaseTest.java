@@ -1,27 +1,31 @@
 package base;
 
-import core.DriverManager;
+import core.selenium.DriverManager;
+import core.selenium.WebElementAction;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import salesforce.ui.PageTransporter;
 import salesforce.ui.pages.LoginPage;
 
-import static configuration.ConfigurationFile.getEnvVariables;
+import static salesforce.configuration.ConfigurationFile.getEnvVariables;
 
 public class BaseTest {
 
-    private WebDriver driver;
+    private DriverManager driverManager;
     protected LoginPage loginPage;
+    protected PageTransporter pageTransporter;
 
     @BeforeClass
     public void beforeClass() {
-        driver = DriverManager.getDriver("chrome");
-        driver.get(getEnvVariables("BASE_URL"));
-        loginPage = new LoginPage(driver);
+        pageTransporter = new PageTransporter();
+        driverManager = DriverManager.getInstance();
+//        driver.get(getEnvVariables("BASE_URL"));
+        loginPage = pageTransporter.navigateToLoginPage();
     }
 
     @AfterClass
     public void tearDown() {
-        DriverManager.quitDriver();
+        DriverManager.getInstance().quitDriver();
     }
 }

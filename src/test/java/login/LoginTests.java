@@ -1,14 +1,14 @@
-package Login;
+package login;
 
 import base.BaseTest;
 import org.testng.annotations.Test;
 import salesforce.ui.pages.HomePage;
 
-import static configuration.ConfigurationFile.getEnvVariables;
+import static salesforce.configuration.ConfigurationFile.getEnvVariables;
 
-public class Login extends BaseTest {
+public class LoginTests extends BaseTest {
 
-//    @Test
+    @Test
     public void testLoginInTheWebPage() {
         HomePage homePage = loginPage.setUserName(getEnvVariables("USER"))
                 .setPassword(getEnvVariables("PASSWORD"))

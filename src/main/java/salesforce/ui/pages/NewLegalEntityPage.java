@@ -43,8 +43,8 @@ public class NewLegalEntityPage extends BasePage {
     @FindBy(xpath = "//div[@class=\"select-options\"]//a[@title=\"Active\"]")
     private WebElement statusOptionDrpDwnMenu;
 
-    public NewLegalEntityPage(WebDriver driver) {
-        super(driver);
+    public NewLegalEntityPage() {
+        super();
     }
 
     @Override
@@ -109,6 +109,6 @@ public class NewLegalEntityPage extends BasePage {
      */
     public LegalEntityPage clickSaveBtn() {
         saveBtn.click();
-        return new LegalEntityPage(driver);
+        return new LegalEntityPage();
     }
 }

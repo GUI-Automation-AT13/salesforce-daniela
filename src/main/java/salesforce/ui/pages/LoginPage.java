@@ -1,6 +1,5 @@
 package salesforce.ui.pages;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -19,22 +18,18 @@ public class LoginPage extends BasePage {
     @FindBy(id = "Login")
     private WebElement loginBtn;
 
-    public LoginPage(WebDriver driver) {
-        super(driver);
-    }
-
     @Override
     protected void waitForPageLoaded() {
-        wait.until(ExpectedConditions.visibilityOf(loginBtn));
+        webElementAction.waitForVisibilityOfElement(loginBtn);
     }
 
     public LoginPage setUserName(final String userName) {
-        userNameTxtBox.sendKeys(userName);
+        webElementAction.setTextInputField(userNameTxtBox, userName);
         return this;
     }
 
     public LoginPage setPassword(final String password) {
-        passwordTxtBox.sendKeys(password);
+        webElementAction.setTextInputField(passwordTxtBox, password);
         return this;
     }
 
