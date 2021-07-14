@@ -6,7 +6,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
- * sadsa.
+ * Helps with the actions of the web elements.
  */
 public class WebElementAction {
 
@@ -19,10 +19,10 @@ public class WebElementAction {
     }
 
     /**
-     * coment.
+     * Sets the text of an input field.
      *
-     * @param webElement sadfsd
-     * @param text sdf
+     * @param webElement webElement to be set.
+     * @param text       text as value that will be set.
      */
     public void setTextInputField(final WebElement webElement, final String text) {
         wait.until(ExpectedConditions.visibilityOf(webElement));
@@ -30,6 +30,11 @@ public class WebElementAction {
         webElement.sendKeys(text);
     }
 
+    /**
+     * Waits fot a web element to be visible.
+     *
+     * @param webElement web element to wait for.
+     */
     public void waitForVisibilityOfElement(final WebElement webElement) {
         wait.until(ExpectedConditions.visibilityOf(webElement));
     }

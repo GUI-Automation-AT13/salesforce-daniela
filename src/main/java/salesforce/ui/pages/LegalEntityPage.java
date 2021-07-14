@@ -1,10 +1,10 @@
 package salesforce.ui.pages;
 
 import java.util.concurrent.TimeUnit;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import salesforce.configuration.ConfigurationFile;
 
 
 /**
@@ -44,7 +44,8 @@ public class LegalEntityPage extends BasePage {
      */
     public String getUserSuccessMessage() {
         successMessage.click();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(Long.parseLong(ConfigurationFile.getEnvVariables("implicitTimeWait")),
+                TimeUnit.SECONDS);
         return successMessage.getText();
     }
 

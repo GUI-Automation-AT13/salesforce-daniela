@@ -17,8 +17,8 @@ public class ConfigurationFile {
     static {
         try {
             CONFIG_PROPERTIES = readFile();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | NullPointerException e) {
+            throw new RuntimeException("It was not possible to read the properties file", e);
         }
     }
 

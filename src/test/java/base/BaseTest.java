@@ -20,7 +20,6 @@ public class BaseTest {
     public void beforeClass() {
         pageTransporter = new PageTransporter();
         driverManager = DriverManager.getInstance();
-//        driver.get(getEnvVariables("BASE_URL"));
         loginPage = pageTransporter.navigateToLoginPage();
     }
 
