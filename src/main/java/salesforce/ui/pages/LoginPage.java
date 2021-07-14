@@ -36,6 +36,7 @@ public class LoginPage extends BasePage {
 
     /**
      * Sets the password.
+     *
      * @param password a string with the password.
      * @return a LoginPage.
      */
