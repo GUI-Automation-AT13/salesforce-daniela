@@ -1,17 +1,17 @@
 package unitests.core.utils;
 
 import core.utils.DateManager;
+import org.openqa.selenium.InvalidArgumentException;
 import org.testng.annotations.Test;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
 import static org.testng.Assert.assertEquals;
 
 public class DateManagerTests {
+
     @Test
     public void testGetTodayDate() throws ParseException {
         DateManager dates = new DateManager();
@@ -20,8 +20,6 @@ public class DateManagerTests {
         Date dateResult = dates.getDate(value);
         Calendar calendar = Calendar.getInstance();
         Date date = parser.parse(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(calendar.getTime()));
-        System.out.println(dateResult);
-        System.out.println(date);
         assertEquals(dateResult, date, "The expected date is incorrect");
     }
 
@@ -34,8 +32,6 @@ public class DateManagerTests {
         Date dateResult = dates.getDate(value);
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         Date date = parser.parse(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(calendar.getTime()));
-        System.out.println(dateResult);
-        System.out.println(date);
         assertEquals(dateResult, date, "The expected date is incorrect");
     }
 
@@ -48,8 +44,6 @@ public class DateManagerTests {
         Date dateResult = dates.getDate(value);
         calendar.add(Calendar.DAY_OF_MONTH, 1);
         Date date = parser.parse(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(calendar.getTime()));
-        System.out.println(dateResult);
-        System.out.println(date);
         assertEquals(dateResult, date, "The expected date is incorrect");
     }
 
@@ -62,8 +56,6 @@ public class DateManagerTests {
         Date dateResult = dates.getDate(value);
         calendar.add(Calendar.DAY_OF_MONTH, -2);
         Date date = parser.parse(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(calendar.getTime()));
-        System.out.println(dateResult);
-        System.out.println(date);
         assertEquals(dateResult, date, "The expected day date is incorrect");
     }
 
@@ -76,8 +68,6 @@ public class DateManagerTests {
         Date dateResult = dates.getDate(value);
         calendar.add(Calendar.HOUR, 20);
         Date date = parser.parse(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(calendar.getTime()));
-        System.out.println(dateResult);
-        System.out.println(date);
         assertEquals(dateResult, date, "The expected hour date is incorrect");
     }
 
@@ -88,8 +78,55 @@ public class DateManagerTests {
         String value = "12/20/2021";
         Date dateResult = dates.getDate(value);
         Date date = parser.parse(value);
-        System.out.println(dateResult);
-        System.out.println(date);
         assertEquals(dateResult, date, "The simple date is incorrect");
+    }
+
+    @Test(expectedExceptions = {InvalidArgumentException.class})
+    public void testGetPassedDateWithInvalidTimeUnit() {
+        DateManager dates = new DateManager();
+        String value = "2 min ago";
+        dates.getDate(value);
+    }
+
+    @Test(expectedExceptions = {NullPointerException.class})
+    public void testGetDateWithNullValue() {
+        DateManager dates = new DateManager();
+        String value = null;
+        dates.getDate(value);
+    }
+
+    @Test(expectedExceptions = {InvalidArgumentException.class})
+    public void testGetDateWithEmptyValue() {
+        DateManager dates = new DateManager();
+        String value = "";
+        dates.getDate(value);
+    }
+
+    @Test(expectedExceptions = {InvalidArgumentException.class})
+    public void testGetDateWithInvalidTimeFormat() {
+        DateManager dates = new DateManager();
+        String value = "MM/dd/yyyy";
+        dates.getDate(value);
+    }
+
+    @Test(expectedExceptions = {InvalidArgumentException.class})
+    public void testGetTodayDateWithInvalidValue() {
+        DateManager dates = new DateManager();
+        String value = "TDY";
+        dates.getDate(value);
+    }
+
+    @Test(expectedExceptions = {NumberFormatException.class, InvalidArgumentException.class})
+    public void testGetFutureDateWithInvalidValue() {
+        DateManager dates = new DateManager();
+        String value = "from now";
+        dates.getDate(value);
+    }
+
+    @Test(expectedExceptions = {NumberFormatException.class, InvalidArgumentException.class})
+    public void testGetPassedDateWithInvalidValue() {
+        DateManager dates = new DateManager();
+        String value = "ago";
+        dates.getDate(value);
     }
 }

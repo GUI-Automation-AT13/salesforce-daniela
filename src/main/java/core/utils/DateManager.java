@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import org.openqa.selenium.InvalidArgumentException;
 
 /**
  * Converts to date a given string with some date.
@@ -19,13 +20,13 @@ public class DateManager {
      * @param calendarDate obtained calendar date.
      * @return a date.
      */
-    public Date addFormatDate(Calendar calendarDate) {
+    private Date addFormatDate(Calendar calendarDate) {
         DateFormat parser = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date;
         try {
             date = parser.parse(new SimpleDateFormat("MM/dd/yyyy HH:mm:ss").format(calendarDate.getTime()));
         } catch (ParseException e) {
-            throw new RuntimeException("The value is not valid");
+            throw new RuntimeException("It was not possible to format the date", e);
         }
         return date;
     }
@@ -37,20 +38,29 @@ public class DateManager {
      * @return a date.
      */
     public Date getDate(String stringDate) {
-        Date newDate = null;
+        if (stringDate == null) {
+            throw new NullPointerException("It was not possible to get the date, the value was null");
+        } else if (stringDate.equals("")) {
+            throw new InvalidArgumentException("It was not possible to get the date, the value was empty");
+        }
+        Date newDate;
         if (stringDate.matches("TODAY|TOMORROW|YESTERDAY")) {
             newDate = oneDateGroup(stringDate);
+            return newDate;
         }
         if (stringDate.contains("ago")) {
             newDate = passedDateGroup(stringDate);
+            return newDate;
         }
         if (stringDate.contains("from now")) {
             newDate = futureDateGroup(stringDate);
+            return newDate;
         }
         if (stringDate.contains("/")) {
             newDate = simpleDateGroup(stringDate);
+            return newDate;
         }
-        return newDate;
+        throw new InvalidArgumentException("It was not possible to get the date, invalid argument");
     }
 
     /**
@@ -59,11 +69,10 @@ public class DateManager {
      * @param date a string with the date to find.
      * @return a date.
      */
-    public Date oneDateGroup(String date) {
+    private Date oneDateGroup(String date) {
         today = Calendar.getInstance();
         if (date.equals("TODAY")) {
             return addFormatDate(today);
-
         }
         if (date.equals("TOMORROW")) {
             today.add(Calendar.DAY_OF_MONTH, 1);
@@ -73,8 +82,7 @@ public class DateManager {
             today.add(Calendar.DAY_OF_MONTH, -1);
             return addFormatDate(today);
         }
-
-        return null;
+        throw new InvalidArgumentException("Invalid argument, unsupported String value");
     }
 
     /**
@@ -83,13 +91,19 @@ public class DateManager {
      * @param date a string with the date to find.
      * @return a date.
      */
-    public Date passedDateGroup(String date) {
+    private Date passedDateGroup(String date) {
         int number;
-        String word;
         String[] result = date.trim().split(" ");
-        number = (Integer.parseInt(result[0]));
-        word = result[1];
-        return separateUnits(word, -number);
+        if (result.length == 3) {
+            try {
+                number = (Integer.parseInt(result[0]));
+            } catch (IllegalArgumentException e) {
+                throw new NumberFormatException();
+            }
+            String timeUnit = result[1];
+            return separateUnits(timeUnit, -number);
+        }
+        throw new InvalidArgumentException("Invalid argument, unsupported String value");
     }
 
     /**
@@ -98,53 +112,59 @@ public class DateManager {
      * @param date a string with the date to find.
      * @return a date.
      */
-    public Date futureDateGroup(String date) {
+    private Date futureDateGroup(String date) {
         int number;
-        String word;
         String[] result = date.trim().split(" ");
-        number = (Integer.parseInt(result[0]));
-        word = result[1];
-        return separateUnits(word, number);
+        if (result.length == 4) {
+            try {
+                number = (Integer.parseInt(result[0]));
+            } catch (IllegalArgumentException e) {
+                throw new NumberFormatException();
+            }
+            String timeUnit = result[1];
+            return separateUnits(timeUnit, number);
+        }
+        throw new InvalidArgumentException("Invalid argument, unsupported String value");
     }
 
     /**
      * Separates the time units.
      *
-     * @param word the unit to change.
-     * @param number the amount to change.
+     * @param timeUnit the unit to change.
+     * @param number   the amount to change.
      * @return a date.
      */
-    public Date separateUnits(String word, int number) {
+    private Date separateUnits(String timeUnit, int number) {
         today = Calendar.getInstance();
-        if (word.matches("second|seconds")) {
+        if (timeUnit.matches("second|seconds")) {
             today.add(Calendar.SECOND, number);
             return addFormatDate(today);
         }
-        if (word.matches("minute|minutes")) {
+        if (timeUnit.matches("minute|minutes")) {
             today.add(Calendar.MINUTE, number);
             return addFormatDate(today);
         }
-        if (word.matches("hour|hours")) {
+        if (timeUnit.matches("hour|hours")) {
             today.add(Calendar.HOUR, number);
             return addFormatDate(today);
         }
-        if (word.matches("day|days")) {
+        if (timeUnit.matches("day|days")) {
             today.add(Calendar.DAY_OF_YEAR, number);
             return addFormatDate(today);
         }
-        if (word.matches("week|weeks")) {
+        if (timeUnit.matches("week|weeks")) {
             today.add(Calendar.WEEK_OF_MONTH, number);
             return addFormatDate(today);
         }
-        if (word.matches("month|months")) {
+        if (timeUnit.matches("month|months")) {
             today.add(Calendar.MONTH, number);
             return addFormatDate(today);
         }
-        if (word.matches("year|years")) {
+        if (timeUnit.matches("year|years")) {
             today.add(Calendar.YEAR, number);
             return addFormatDate(today);
         }
-        return null;
+        throw new InvalidArgumentException("Invalid time unit, unsupported String value");
     }
 
     /**
@@ -153,13 +173,13 @@ public class DateManager {
      * @param dateString a string with the date to find.
      * @return a date.
      */
-    public Date simpleDateGroup(String dateString) {
+    private Date simpleDateGroup(String dateString) {
         DateFormat parser = new SimpleDateFormat("MM/dd/yyyy");
-        Date date = new Date();
+        Date date;
         try {
             date = parser.parse(dateString);
         } catch (ParseException e) {
-            e.printStackTrace();
+            throw new InvalidArgumentException("It was not possible to format the date", e);
         }
         return date;
     }
