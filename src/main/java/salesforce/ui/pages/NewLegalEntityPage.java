@@ -1,6 +1,5 @@
 package salesforce.ui.pages;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -53,7 +52,7 @@ public class NewLegalEntityPage extends BasePage {
     }
 
     public NewLegalEntityPage setNameTxtBox(final String entityName) {
-        nameTxtBox.sendKeys(entityName);
+        webElementAction.setTextInputField(nameTxtBox, entityName);
         return this;
     }
 
@@ -64,7 +63,7 @@ public class NewLegalEntityPage extends BasePage {
      * @return a NewLegalEntityPage
      */
     public NewLegalEntityPage setCompanyNameTxtBox(final String companyName) {
-        companyNameTxtBox.sendKeys(companyName);
+        webElementAction.setTextInputField(companyNameTxtBox, companyName);
         return this;
     }
 
@@ -75,7 +74,7 @@ public class NewLegalEntityPage extends BasePage {
      * @return a NewLegalEntityPage
      */
     public NewLegalEntityPage setStreetTxtBox(final String street) {
-        streetTxtBox.sendKeys(street);
+        webElementAction.setTextInputField(streetTxtBox, street);
         return this;
     }
 
@@ -86,7 +85,7 @@ public class NewLegalEntityPage extends BasePage {
      * @return a NewLegalEntityPage
      */
     public NewLegalEntityPage setDescriptionTxtBox(final String description) {
-        descriptionTxtBox.sendKeys(description);
+        webElementAction.setTextInputField(descriptionTxtBox, description);
         return this;
     }
 
@@ -97,7 +96,7 @@ public class NewLegalEntityPage extends BasePage {
      * @return a NewLegalEntityPage
      */
     public NewLegalEntityPage setCityTxtBox(final String city) {
-        cityTxtBox.sendKeys(city);
+        webElementAction.setTextInputField(cityTxtBox, city);
         return this;
     }
 
@@ -108,7 +107,7 @@ public class NewLegalEntityPage extends BasePage {
      * @return a NewLegalEntityPage
      */
     public NewLegalEntityPage setStateTxtBox(final String state) {
-        stateTxtBox.sendKeys(state);
+        webElementAction.setTextInputField(stateTxtBox, state);
         return this;
     }
 
@@ -119,7 +118,7 @@ public class NewLegalEntityPage extends BasePage {
      * @return a NewLegalEntityPage
      */
     public NewLegalEntityPage setPostalCodeTxtBox(final String postalCode) {
-        postalCodeTxtBox.sendKeys(postalCode);
+        webElementAction.setTextInputField(postalCodeTxtBox, postalCode);
         return this;
     }
 
@@ -130,7 +129,7 @@ public class NewLegalEntityPage extends BasePage {
      * @return a NewLegalEntityPage
      */
     public NewLegalEntityPage setCountryTxtBox(final String country) {
-        countryTxtBox.sendKeys(country);
+        webElementAction.setTextInputField(countryTxtBox, country);
         return this;
     }
 
@@ -141,7 +140,7 @@ public class NewLegalEntityPage extends BasePage {
      * @return a NewLegalEntityPage
      */
     public NewLegalEntityPage setStatusDrpDwnMenu(final String statusMenu) {
-        statusDrpDwnMenu.sendKeys(statusMenu);
+        webElementAction.setTextInputField(statusDrpDwnMenu, statusMenu);
         return this;
     }
 
@@ -152,7 +151,7 @@ public class NewLegalEntityPage extends BasePage {
      * @return a NewLegalEntityPage
      */
     public NewLegalEntityPage setStatusOptionDrpDwnMenu(final String statusOption) {
-        statusOptionDrpDwnMenu.sendKeys(statusOption);
+        webElementAction.setTextInputField(statusOptionDrpDwnMenu, statusOption);
         return this;
     }
 
@@ -162,7 +161,7 @@ public class NewLegalEntityPage extends BasePage {
      * @return A LegalEntityPage.
      */
     public LegalEntityPage clickSaveBtn() {
-        saveBtn.click();
+        webElementAction.clickButton(saveBtn);
         return new LegalEntityPage();
     }
 }

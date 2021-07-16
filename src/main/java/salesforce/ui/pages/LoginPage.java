@@ -2,7 +2,6 @@ package salesforce.ui.pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  * Interacts with the login elements.
@@ -51,7 +50,7 @@ public class LoginPage extends BasePage {
      * @return A homePage.
      */
     public HomePage clickLoginBtn() {
-        loginBtn.click();
+        webElementAction.clickButton(loginBtn);
         return new HomePage(driver);
 
     }

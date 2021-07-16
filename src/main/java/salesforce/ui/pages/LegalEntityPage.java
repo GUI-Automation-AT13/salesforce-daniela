@@ -33,7 +33,7 @@ public class LegalEntityPage extends BasePage {
      * @return A NewLegalEntityPage.
      */
     public NewLegalEntityPage clickNewBtn() {
-        newEntityBtn.click();
+        webElementAction.clickButton(newEntityBtn);
         return new NewLegalEntityPage();
     }
 

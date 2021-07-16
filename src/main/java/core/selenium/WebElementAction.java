@@ -31,6 +31,16 @@ public class WebElementAction {
     }
 
     /**
+     * Clicks the button.
+     *
+     * @param webElement webElement to be clicked.
+     */
+    public void clickButton(final WebElement webElement) {
+        wait.until(ExpectedConditions.visibilityOf(webElement));
+        webElement.click();
+    }
+
+    /**
      * Waits fot a web element to be visible.
      *
      * @param webElement web element to wait for.
