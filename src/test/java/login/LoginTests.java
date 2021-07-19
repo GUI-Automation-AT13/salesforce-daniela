@@ -10,8 +10,6 @@ public class LoginTests extends BaseTest {
 
     @Test
     public void testLoginInTheWebPage() {
-        HomePage homePage = loginPage.setUserName(getEnvVariables("USER"))
-                .setPassword(getEnvVariables("PASSWORD"))
-                .clickLoginBtn();
+        HomePage homePage = loginPage.loginSuccessful(getEnvVariables("USER"), getEnvVariables("PASSWORD"));
     }
 }

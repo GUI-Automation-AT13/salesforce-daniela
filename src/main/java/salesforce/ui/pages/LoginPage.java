@@ -28,7 +28,7 @@ public class LoginPage extends BasePage {
      * @param userName a string with the user name.
      * @return a LoginPage.
      */
-    public LoginPage setUserName(final String userName) {
+    private LoginPage setUserName(final String userName) {
         webElementAction.setTextInputField(userNameTxtBox, userName);
         return this;
     }
@@ -39,19 +39,31 @@ public class LoginPage extends BasePage {
      * @param password a string with the password.
      * @return a LoginPage.
      */
-    public LoginPage setPassword(final String password) {
+    private LoginPage setPassword(final String password) {
         webElementAction.setTextInputField(passwordTxtBox, password);
         return this;
     }
 
     /**
      * Clicks the login button.
-     *
-     * @return A homePage.
      */
-    public HomePage clickLoginBtn() {
+    public void clickLoginBtn() {
         webElementAction.clickButton(loginBtn);
-        return new HomePage(driver);
+    }
 
+    /**
+     * login with successful values.
+     *
+     * @param userName to be set.
+     * @param password to be set.
+     * @return the home page.
+     */
+    public HomePage loginSuccessful(final String userName, final String password) {
+        setUserName(userName);
+        setPassword(password);
+        clickLoginBtn();
+        return new HomePage();
     }
 }
+
+

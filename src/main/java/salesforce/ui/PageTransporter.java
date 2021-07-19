@@ -4,7 +4,8 @@ import static salesforce.configuration.ConfigurationFile.getEnvVariables;
 
 import core.selenium.DriverManager;
 import salesforce.configuration.ConfigurationFile;
-import salesforce.ui.pages.LegalEntityPage;
+import salesforce.ui.pages.HomePage;
+import salesforce.ui.pages.LegalEntitiesPage;
 import salesforce.ui.pages.LoginPage;
 
 /**
@@ -28,9 +29,19 @@ public class PageTransporter {
      *
      * @return a LegalEntityPage.
      */
-    public LegalEntityPage navigateToLegalEntityPage() {
+    public LegalEntitiesPage navigateToLegalEntityPage() {
         goToUrl(baseUrl.concat(ConfigurationFile.getEnvVariables("ENTITIES_URL")));
-        return new LegalEntityPage();
+        return new LegalEntitiesPage();
+    }
+
+    /**
+     * Navigates to the Legal entities page.
+     *
+     * @return a LegalEntityPage.
+     */
+    public HomePage navigateToLegalHomePage() {
+        goToUrl(baseUrl);
+        return new HomePage();
     }
 
     /**

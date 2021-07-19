@@ -1,5 +1,6 @@
 package core.selenium;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -41,11 +42,21 @@ public class WebElementAction {
     }
 
     /**
-     * Waits fot a web element to be visible.
+     * Waits for a web element to be visible.
      *
      * @param webElement web element to wait for.
      */
     public void waitForVisibilityOfElement(final WebElement webElement) {
         wait.until(ExpectedConditions.visibilityOf(webElement));
+    }
+
+    /**
+     * Finds a web element.
+     *
+     * @param webElement web element to find.
+     */
+    public String getTextOfElement(final WebElement webElement) {
+        wait.until(ExpectedConditions.visibilityOf(webElement));
+        return webElement.getText();
     }
 }

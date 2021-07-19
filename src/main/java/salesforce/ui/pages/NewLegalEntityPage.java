@@ -48,7 +48,8 @@ public class NewLegalEntityPage extends BasePage {
 
     @Override
     protected void waitForPageLoaded() {
-        wait.until(ExpectedConditions.visibilityOf(saveBtn));
+        //wait.until(ExpectedConditions.visibilityOf(saveBtn));
+        webElementAction.waitForVisibilityOfElement(saveBtn);
     }
 
     public NewLegalEntityPage setNameTxtBox(final String entityName) {
@@ -136,22 +137,20 @@ public class NewLegalEntityPage extends BasePage {
     /**
      * Sets the statusMenu.
      *
-     * @param statusMenu a String with the statusMenu.
      * @return a NewLegalEntityPage
      */
-    public NewLegalEntityPage setStatusDrpDwnMenu(final String statusMenu) {
-        webElementAction.setTextInputField(statusDrpDwnMenu, statusMenu);
+    public NewLegalEntityPage clickStatusDrpDwnMenu() {
+        webElementAction.clickButton(statusDrpDwnMenu);
         return this;
     }
 
     /**
      * Sets the statusOption.
      *
-     * @param statusOption a String with the statusOption.
      * @return a NewLegalEntityPage
      */
-    public NewLegalEntityPage setStatusOptionDrpDwnMenu(final String statusOption) {
-        webElementAction.setTextInputField(statusOptionDrpDwnMenu, statusOption);
+    public NewLegalEntityPage clickStatusOptionDrpDwnMenu() {
+        webElementAction.clickButton(statusOptionDrpDwnMenu);
         return this;
     }
 
