@@ -20,7 +20,7 @@ public class DateManager {
      * @param calendarDate obtained calendar date.
      * @return a date.
      */
-    private Date addFormatDate(Calendar calendarDate) {
+    public Date addFormatDate(Calendar calendarDate) {
         DateFormat parser = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date;
         try {
@@ -39,9 +39,9 @@ public class DateManager {
      */
     public Date getDate(String stringDate) {
         if (stringDate == null) {
-            throw new NullPointerException("It was not possible to get the date, the value was null");
+            throw new NullPointerException("Invalid Argument: Unsupported String Format.");
         } else if (stringDate.equals("")) {
-            throw new InvalidArgumentException("It was not possible to get the date, the value was empty");
+            throw new InvalidArgumentException("Invalid Argument: Unsupported String Format.");
         }
         Date newDate;
         if (stringDate.matches("TODAY|TOMORROW|YESTERDAY")) {
@@ -60,7 +60,7 @@ public class DateManager {
             newDate = simpleDateGroup(stringDate);
             return newDate;
         }
-        throw new InvalidArgumentException("It was not possible to get the date, invalid argument");
+        throw new InvalidArgumentException("Invalid Argument: Unsupported String Format.");
     }
 
     /**
@@ -82,7 +82,7 @@ public class DateManager {
             today.add(Calendar.DAY_OF_MONTH, -1);
             return addFormatDate(today);
         }
-        throw new InvalidArgumentException("Invalid argument, unsupported String value");
+        throw new InvalidArgumentException("Invalid Argument: Unsupported String Format.");
     }
 
     /**
@@ -103,7 +103,7 @@ public class DateManager {
             String timeUnit = result[1];
             return separateUnits(timeUnit, -number);
         }
-        throw new InvalidArgumentException("Invalid argument, unsupported String value");
+        throw new InvalidArgumentException("Invalid Argument: Unsupported String Format.");
     }
 
     /**
@@ -124,7 +124,7 @@ public class DateManager {
             String timeUnit = result[1];
             return separateUnits(timeUnit, number);
         }
-        throw new InvalidArgumentException("Invalid argument, unsupported String value");
+        throw new InvalidArgumentException("Invalid Argument: Unsupported String Format.");
     }
 
     /**
@@ -164,7 +164,7 @@ public class DateManager {
             today.add(Calendar.YEAR, number);
             return addFormatDate(today);
         }
-        throw new InvalidArgumentException("Invalid time unit, unsupported String value");
+        throw new InvalidArgumentException("Invalid Argument: Unsupported String Format.");
     }
 
     /**
