@@ -1,22 +1,17 @@
 package salesforce.ui.pages;
 
+import java.util.HashMap;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
  * Interacts with the New Legal Entity elements.
  */
 public class NewLegalEntityPage extends BasePage {
 
-    @FindBy(xpath = "//label/span[text()=\"Name\"]/../..//input")
-    private WebElement nameTxtBox;
-
     @FindBy(xpath = "//button[@title=\"Save\"]")
     private WebElement saveBtn;
-
-    @FindBy(xpath = "//label/span[text()=\"Company Name\"]/../..//input")
-    private WebElement companyNameTxtBox;
 
     @FindBy(xpath = "//div/textarea[@placeholder=\"Street\"]")
     private WebElement streetTxtBox;
@@ -24,47 +19,55 @@ public class NewLegalEntityPage extends BasePage {
     @FindBy(xpath = "//div/textarea[@class=\" textarea\"]")
     private WebElement descriptionTxtBox;
 
-    @FindBy(xpath = "//label/span[text()=\"City\"]/../..//input")
-    private WebElement cityTxtBox;
-
-    @FindBy(xpath = "//label/span[text()=\"State\"]/../..//input")
-    private WebElement stateTxtBox;
-
-    @FindBy(xpath = "//label/span[text()=\"Postal Code\"]/../..//input")
-    private WebElement postalCodeTxtBox;
-
-    @FindBy(xpath = "//label/span[text()=\"Country\"]/../..//input")
-    private WebElement countryTxtBox;
-
     @FindBy(xpath = "//a[@class=\"select\"]")
     private WebElement statusDrpDwnMenu;
 
     @FindBy(xpath = "//div[@class=\"select-options\"]//a[@title=\"Active\"]")
     private WebElement statusOptionDrpDwnMenu;
 
-    public NewLegalEntityPage() {
-        super();
+    private static final String INPUT_XPATH = "//label/span[text()='%s']/../..//input";
+    private static final String DROPDOWN_XPATH = "//a[@class='%s']";
+    private static final String DROPDOWN_OPTION_XPATH = "//div[@class=\"select-options\"]//a[@title='%s']";
+    private static final HashMap<String, String> inputFieldNames = new HashMap<>();
+
+    static {
+        inputFieldNames.put("name", "Name");
+        inputFieldNames.put("company name", "Company Name");
+        inputFieldNames.put("city", "City");
+        inputFieldNames.put("state", "State");
+        inputFieldNames.put("postal code", "Postal Code");
+        inputFieldNames.put("country", "Country");
     }
+
 
     @Override
     protected void waitForPageLoaded() {
-        //wait.until(ExpectedConditions.visibilityOf(saveBtn));
         webElementAction.waitForVisibilityOfElement(saveBtn);
     }
 
-    public NewLegalEntityPage setNameTxtBox(final String entityName) {
-        webElementAction.setTextInputField(nameTxtBox, entityName);
+    /**
+     * Sets the inputs fields.
+     *
+     * @param fieldName the name field to set.
+     * @param value     the value of the field.
+     * @return a NewLegalEntity.
+     */
+    public NewLegalEntityPage setInputField(final String fieldName, final String value) {
+        webElementAction.setTextInputField(driver.findElement(By.xpath(
+                String.format(INPUT_XPATH, inputFieldNames.get(fieldName)))), value);
         return this;
     }
 
     /**
-     * Sets the companyName.
+     * Selects an option from a dropdown menu.
      *
-     * @param companyName a String with the companyName.
-     * @return a NewLegalEntityPage
+     * @param fieldName the name of the menu field.
+     * @param option     the option to select.
+     * @return a NewLegalEntity.
      */
-    public NewLegalEntityPage setCompanyNameTxtBox(final String companyName) {
-        webElementAction.setTextInputField(companyNameTxtBox, companyName);
+    public NewLegalEntityPage selectFromDropDown(final String fieldName, final String option) {
+        webElementAction.clickElement(driver.findElement(By.xpath(String.format(DROPDOWN_XPATH, fieldName))));
+        webElementAction.clickElement(driver.findElement(By.xpath(String.format(DROPDOWN_OPTION_XPATH, option))));
         return this;
     }
 
@@ -91,76 +94,12 @@ public class NewLegalEntityPage extends BasePage {
     }
 
     /**
-     * Sets the city.
-     *
-     * @param city a String with the city.
-     * @return a NewLegalEntityPage
-     */
-    public NewLegalEntityPage setCityTxtBox(final String city) {
-        webElementAction.setTextInputField(cityTxtBox, city);
-        return this;
-    }
-
-    /**
-     * Sets the state.
-     *
-     * @param state a String with the state.
-     * @return a NewLegalEntityPage
-     */
-    public NewLegalEntityPage setStateTxtBox(final String state) {
-        webElementAction.setTextInputField(stateTxtBox, state);
-        return this;
-    }
-
-    /**
-     * Sets the postalCode.
-     *
-     * @param postalCode a String with the postalCode.
-     * @return a NewLegalEntityPage
-     */
-    public NewLegalEntityPage setPostalCodeTxtBox(final String postalCode) {
-        webElementAction.setTextInputField(postalCodeTxtBox, postalCode);
-        return this;
-    }
-
-    /**
-     * Sets the country.
-     *
-     * @param country a String with the country.
-     * @return a NewLegalEntityPage
-     */
-    public NewLegalEntityPage setCountryTxtBox(final String country) {
-        webElementAction.setTextInputField(countryTxtBox, country);
-        return this;
-    }
-
-    /**
-     * Sets the statusMenu.
-     *
-     * @return a NewLegalEntityPage
-     */
-    public NewLegalEntityPage clickStatusDrpDwnMenu() {
-        webElementAction.clickButton(statusDrpDwnMenu);
-        return this;
-    }
-
-    /**
-     * Sets the statusOption.
-     *
-     * @return a NewLegalEntityPage
-     */
-    public NewLegalEntityPage clickStatusOptionDrpDwnMenu() {
-        webElementAction.clickButton(statusOptionDrpDwnMenu);
-        return this;
-    }
-
-    /**
      * Clicks the save button.
      *
      * @return A LegalEntityPage.
      */
     public LegalEntityPage clickSaveBtn() {
-        webElementAction.clickButton(saveBtn);
+        webElementAction.clickElement(saveBtn);
         return new LegalEntityPage();
     }
 }

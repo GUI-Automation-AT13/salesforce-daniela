@@ -1,6 +1,5 @@
 package core.selenium;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -32,11 +31,11 @@ public class WebElementAction {
     }
 
     /**
-     * Clicks the button.
+     * Clicks an element.
      *
      * @param webElement webElement to be clicked.
      */
-    public void clickButton(final WebElement webElement) {
+    public void clickElement(final WebElement webElement) {
         wait.until(ExpectedConditions.visibilityOf(webElement));
         webElement.click();
     }
@@ -51,9 +50,9 @@ public class WebElementAction {
     }
 
     /**
-     * Finds a web element.
+     * Gets the text of a web element.
      *
-     * @param webElement web element to find.
+     * @param webElement web element to get it's text.
      */
     public String getTextOfElement(final WebElement webElement) {
         wait.until(ExpectedConditions.visibilityOf(webElement));

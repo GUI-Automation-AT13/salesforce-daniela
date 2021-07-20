@@ -8,8 +8,8 @@ import static salesforce.configuration.ConfigurationFile.getEnvVariables;
 
 public class LoginTests extends BaseTest {
 
-    @Test
-    public void testLoginInTheWebPage() {
-        HomePage homePage = loginPage.loginSuccessful(getEnvVariables("USER"), getEnvVariables("PASSWORD"));
-    }
+//    @Test
+//    public void testLoginInTheWebPage() {
+//        HomePage homePage = loginPage.loginSuccessful(getEnvVariables("USER"), getEnvVariables("PASSWORD"));
+//    }
 }

@@ -1,11 +1,7 @@
 package base;
 
 import core.selenium.DriverManager;
-import core.selenium.WebElementAction;
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import salesforce.ui.PageTransporter;
 import salesforce.ui.pages.HomePage;
@@ -33,6 +29,7 @@ public class BaseTest {
 
     @AfterTest
     public void tearDown() {
+//        legalEntitiesPage.clickDeleteBtn();
         DriverManager.getInstance().quitDriver();
     }
 }

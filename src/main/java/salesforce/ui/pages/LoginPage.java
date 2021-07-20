@@ -48,7 +48,7 @@ public class LoginPage extends BasePage {
      * Clicks the login button.
      */
     public void clickLoginBtn() {
-        webElementAction.clickButton(loginBtn);
+        webElementAction.clickElement(loginBtn);
     }
 
     /**

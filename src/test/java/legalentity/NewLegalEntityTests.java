@@ -2,11 +2,14 @@ package legalentity;
 
 import base.BaseTest;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import salesforce.ui.pages.*;
-import static org.testng.Assert.assertEquals;
 
 public class NewLegalEntityTests extends BaseTest {
 
+    SoftAssert sa= new SoftAssert();
+    NewLegalEntityPage newLegalEntityPage;
+    LegalEntityPage legalEntityPage;
     String name = "New Legal Entity";
     String nameComplete = "New complete Legal Entity";
     String company = "First company";
@@ -16,26 +19,31 @@ public class NewLegalEntityTests extends BaseTest {
     String state = "The state";
     String postalCode = "0023";
     String country = "Boolivia";
-    NewLegalEntityPage newLegalEntityPage;
-    LegalEntityPage legalEntityPage;
+    String dropdownOption = "Active";
 
     @Test
     public void testCreateLegalEntityWithRequiredFields() {
         newLegalEntityPage = legalEntitiesPage.clickNewBtn();
-        legalEntityPage = newLegalEntityPage.setNameTxtBox(name).clickSaveBtn();
+        legalEntityPage = newLegalEntityPage.setInputField("name",name).clickSaveBtn();
         String expectedMessage = legalEntityPage.getUserSuccessMessage();
-        assertEquals(expectedMessage, "success\nLegal Entity \"" + name + "\" was created.\nClose", "Message is incorrect");
+        String expectedName = legalEntityPage.getNamesText("name");
+        sa.assertEquals(expectedMessage, "success\nLegal Entity \"" + name + "\" was created.\nClose", "Message is incorrect");
+        sa.assertEquals(name ,expectedName);
+        sa.assertAll();
         legalEntitiesPage = pageTransporter.navigateToLegalEntityPage();
     }
 
     @Test
     public void testCreateLegalEntityWithFullFields() {
         newLegalEntityPage = legalEntitiesPage.clickNewBtn();
-        legalEntityPage = newLegalEntityPage.setNameTxtBox(nameComplete).setCompanyNameTxtBox(company).setStreetTxtBox(street)
-                .setDescriptionTxtBox(description).setCityTxtBox(city).setStateTxtBox(state).setPostalCodeTxtBox(postalCode)
-                .setCountryTxtBox(country).clickStatusDrpDwnMenu().clickStatusOptionDrpDwnMenu().clickSaveBtn();
+        legalEntityPage = newLegalEntityPage.setInputField("name", nameComplete)
+                .setInputField("company name", company).setStreetTxtBox(street)
+                .setDescriptionTxtBox(description).setInputField("city", city)
+                .setInputField("state", state).setInputField("postal code", postalCode)
+                .setInputField("country", country).selectFromDropDown("select", dropdownOption)
+                .clickSaveBtn();
         String expectedMessage = legalEntityPage.getUserSuccessMessage();
-        assertEquals(expectedMessage, "success\nLegal Entity \"" + nameComplete + "\" was created.\nClose", "Message is incorrect");
+        sa.assertEquals(expectedMessage, "success\nLegal Entity \"" + nameComplete + "\" was created.\nClose", "Message is incorrect");
         legalEntitiesPage = pageTransporter.navigateToLegalEntityPage();
     }
 }
