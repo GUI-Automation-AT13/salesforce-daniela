@@ -1,6 +1,7 @@
 package legalentity;
 
 import base.BaseTest;
+import core.utils.DateManager;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import salesforce.ui.pages.*;
@@ -8,11 +9,11 @@ import salesforce.ui.pages.*;
 public class NewLegalEntityTests extends BaseTest {
 
     SoftAssert sa = new SoftAssert();
+    DateManager dateManager = new DateManager();;
     NewLegalEntityPage newLegalEntityPage;
     LegalEntityPage legalEntityPage;
-    int numero = (int)(Math. random()*100+1);
-    String name = "New Legal Entity" + numero;
-    String nameComplete = "New complete Legal Entity";
+    String name = "New Legal Entity" + dateManager.getTodayDate();
+    String nameComplete = "New complete Legal Entity" + dateManager.getTodayDate();
     String company = "First company";
     String street = "S. elm # 557";
     String description = "Blue door";
@@ -29,10 +30,15 @@ public class NewLegalEntityTests extends BaseTest {
         legalEntityPage = newLegalEntityPage.setInputField("name", name).clickSaveBtn();
         String expectedMessage = legalEntityPage.getUserSuccessMessage();
         String expectedName = legalEntityPage.getEntityNameText(name);
+        //Verify success message
         sa.assertEquals(expectedMessage, "success\nLegal Entity \"" + name + "\" was created.\nClose", "Message is incorrect");
+        //Verify Legal Entity field (name)
         sa.assertEquals(name, expectedName);
-        sa.assertAll();
+        //Go to Legal Entities Page
         legalEntitiesPage = pageTransporter.navigateToLegalEntityPage();
+        //Verify Legal Entity name
+        sa.assertEquals(name, legalEntitiesPage.getTableEntity(name));
+        sa.assertAll();
     }
 
     @Test
@@ -45,7 +51,9 @@ public class NewLegalEntityTests extends BaseTest {
                 .setInputField("country", country).selectFromDropDown("select", dropdownOption)
                 .clickSaveBtn();
         String expectedMessage = legalEntityPage.getUserSuccessMessage();
+        //Verify success message
         sa.assertEquals(expectedMessage, "success\nLegal Entity \"" + nameComplete + "\" was created.\nClose", "Message is incorrect");
+        //Verify Legal Entity fields (name, company name, street, address, country, description, status)
         sa.assertEquals(nameComplete, legalEntityPage.getNamesText("name"));
         sa.assertEquals(company, legalEntityPage.getNamesText("company name"));
         sa.assertEquals(street, legalEntityPage.getAddressNamesText("street"));
@@ -53,7 +61,10 @@ public class NewLegalEntityTests extends BaseTest {
         sa.assertEquals(country, legalEntityPage.getAddressNamesText("country"));
         sa.assertEquals(description, legalEntityPage.getDescriptionText());
         sa.assertEquals(dropdownOption, legalEntityPage.getStatusText());
-        sa.assertAll();
+        //Go to Legal Entities Page
         legalEntitiesPage = pageTransporter.navigateToLegalEntityPage();
+        //Verify Legal Entity name
+        sa.assertEquals(nameComplete, legalEntitiesPage.getTableEntity(nameComplete));
+        sa.assertAll();
     }
 }

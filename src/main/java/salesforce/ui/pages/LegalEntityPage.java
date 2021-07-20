@@ -70,6 +70,12 @@ public class LegalEntityPage extends BasePage {
         return webElementAction.getTextOfElement(successMessage);
     }
 
+    /**
+     * Gets the entity name text.
+     *
+     * @param nameEntity s String with the name of the entity.
+     * @return a string with the entity name text.
+     */
     public String getEntityNameText(final String nameEntity) {
         return webElementAction.getTextOfElement(driver.findElement(By.xpath(String.format(entityName, nameEntity))));
     }

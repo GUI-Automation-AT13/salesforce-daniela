@@ -1,6 +1,7 @@
 package base;
 
 import core.selenium.DriverManager;
+import core.utils.DateManager;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import salesforce.ui.PageTransporter;
@@ -12,7 +13,7 @@ import static salesforce.configuration.ConfigurationFile.getEnvVariables;
 
 public class BaseTest {
 
-    private DriverManager driverManager;
+    DriverManager driverManager;
     protected HomePage homePage;
     protected LoginPage loginPage;
     protected PageTransporter pageTransporter;
