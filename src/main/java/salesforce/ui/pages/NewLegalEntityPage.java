@@ -42,7 +42,7 @@ public class NewLegalEntityPage extends BasePage {
 
     @Override
     protected void waitForPageLoaded() {
-        webElementAction.waitForVisibilityOfElement(saveBtn);
+        webElementAction.waitForVisibilityOfElement(streetTxtBox);
     }
 
     /**

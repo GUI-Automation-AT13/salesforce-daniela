@@ -1,7 +1,6 @@
 package salesforce.ui.pages;
 
 import java.util.HashMap;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -14,8 +13,8 @@ public class LegalEntityPage extends BasePage {
     @FindBy(css = ".slds-theme--success")
     private WebElement successMessage;
 
-    @FindBy(xpath = "//div//span[text()=\"Name\"]/../..//div//span[@class=\"uiOutputText\"]")
-    private WebElement entityName;
+    @FindBy(css = "div.slds-form")
+    private WebElement informationSection;
 
     @FindBy(xpath = "//div/div/span[text()=\"Company Name\"]/../..//div//span/*")
     private WebElement companyName;
@@ -35,8 +34,9 @@ public class LegalEntityPage extends BasePage {
     @FindBy(css = "a.forceOutputAddress div:nth-child(3)")
     private WebElement country;
 
-    private static final String NAMES_XPATH = "//div//span[text()='%s']/../..//div//span[@class=\"uiOutputText\"]";
-    private static final String ADDRESS_XPATH = "a.forceOutputAddress div:nth-child('%s')";
+    private static final String NAMES_XPATH = "//div/div/span[text()='%s']/../..//div//span[@class=\"uiOutputText\"]";
+    private static final String ADDRESS_XPATH = "a.forceOutputAddress div:nth-child(%s)";
+    private static final String entityName = "//h1//div//span[@class=\"uiOutputText\"][text()=\"%s\"]";
     private static final HashMap<String, String> spanNames = new HashMap<>();
 
     static {
@@ -58,6 +58,7 @@ public class LegalEntityPage extends BasePage {
 
     @Override
     protected void waitForPageLoaded() {
+        webElementAction.waitForVisibilityOfElement(informationSection);
     }
 
     /**
@@ -67,6 +68,10 @@ public class LegalEntityPage extends BasePage {
      */
     public String getUserSuccessMessage() {
         return webElementAction.getTextOfElement(successMessage);
+    }
+
+    public String getEntityNameText(final String nameEntity) {
+        return webElementAction.getTextOfElement(driver.findElement(By.xpath(String.format(entityName, nameEntity))));
     }
 
     /**
@@ -85,7 +90,7 @@ public class LegalEntityPage extends BasePage {
      * @return a String with address text.
      */
     public String getAddressNamesText(final String fieldName) {
-        return webElementAction.getTextOfElement(driver.findElement(By.xpath(
+        return webElementAction.getTextOfElement(driver.findElement(By.cssSelector(
                 String.format(ADDRESS_XPATH, divAddress.get(fieldName)))));
     }
 

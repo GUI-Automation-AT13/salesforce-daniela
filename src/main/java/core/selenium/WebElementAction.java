@@ -15,7 +15,7 @@ public class WebElementAction {
 
     public WebElementAction() {
         driver = DriverManager.getInstance().getDriver();
-        wait = new WebDriverWait(driver, 30);
+        wait = new WebDriverWait(driver, 40);
     }
 
     /**

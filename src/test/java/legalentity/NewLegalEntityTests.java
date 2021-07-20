@@ -7,10 +7,11 @@ import salesforce.ui.pages.*;
 
 public class NewLegalEntityTests extends BaseTest {
 
-    SoftAssert sa= new SoftAssert();
+    SoftAssert sa = new SoftAssert();
     NewLegalEntityPage newLegalEntityPage;
     LegalEntityPage legalEntityPage;
-    String name = "New Legal Entity";
+    int numero = (int)(Math. random()*100+1);
+    String name = "New Legal Entity" + numero;
     String nameComplete = "New complete Legal Entity";
     String company = "First company";
     String street = "S. elm # 557";
@@ -20,15 +21,16 @@ public class NewLegalEntityTests extends BaseTest {
     String postalCode = "0023";
     String country = "Boolivia";
     String dropdownOption = "Active";
+    String cityStatePostalCode = city + ", " + state + " " + postalCode;
 
     @Test
     public void testCreateLegalEntityWithRequiredFields() {
         newLegalEntityPage = legalEntitiesPage.clickNewBtn();
-        legalEntityPage = newLegalEntityPage.setInputField("name",name).clickSaveBtn();
+        legalEntityPage = newLegalEntityPage.setInputField("name", name).clickSaveBtn();
         String expectedMessage = legalEntityPage.getUserSuccessMessage();
-        String expectedName = legalEntityPage.getNamesText("name");
+        String expectedName = legalEntityPage.getEntityNameText(name);
         sa.assertEquals(expectedMessage, "success\nLegal Entity \"" + name + "\" was created.\nClose", "Message is incorrect");
-        sa.assertEquals(name ,expectedName);
+        sa.assertEquals(name, expectedName);
         sa.assertAll();
         legalEntitiesPage = pageTransporter.navigateToLegalEntityPage();
     }
@@ -44,6 +46,14 @@ public class NewLegalEntityTests extends BaseTest {
                 .clickSaveBtn();
         String expectedMessage = legalEntityPage.getUserSuccessMessage();
         sa.assertEquals(expectedMessage, "success\nLegal Entity \"" + nameComplete + "\" was created.\nClose", "Message is incorrect");
+        sa.assertEquals(nameComplete, legalEntityPage.getNamesText("name"));
+        sa.assertEquals(company, legalEntityPage.getNamesText("company name"));
+        sa.assertEquals(street, legalEntityPage.getAddressNamesText("street"));
+        sa.assertEquals(cityStatePostalCode, legalEntityPage.getAddressNamesText("city state postalCode"));
+        sa.assertEquals(country, legalEntityPage.getAddressNamesText("country"));
+        sa.assertEquals(description, legalEntityPage.getDescriptionText());
+        sa.assertEquals(dropdownOption, legalEntityPage.getStatusText());
+        sa.assertAll();
         legalEntitiesPage = pageTransporter.navigateToLegalEntityPage();
     }
 }
