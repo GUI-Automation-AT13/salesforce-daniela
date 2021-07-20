@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'checkstyle'
+    id 'info.solidsoft.pitest' version '1.5.1'
 }
 
 group 'org.example'
@@ -13,8 +14,8 @@ repositories {
 dependencies {
     implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
     implementation 'io.github.bonigarcia:webdrivermanager:4.4.3'
+    implementation 'org.pitest:pitest:1.6.7'
     testImplementation 'org.testng:testng:7.4.0'
-
 }
 
 test {
@@ -35,3 +36,11 @@ checkstyleTest {
 }
 check.dependsOn build
 test.finalizedBy("checkstyleMain")
+
+pitest{
+    testPlugin = 'testng'
+    targetClasses = ['core.utils.DateManager']
+    targetTests = ['unitests.core.utils.DateManagerTests*']
+    threads = 4
+    outputFormats = ['XML', 'HTML']
+}
