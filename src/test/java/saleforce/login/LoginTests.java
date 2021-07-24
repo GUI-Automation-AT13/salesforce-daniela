@@ -1,6 +1,6 @@
-package login;
+package saleforce.login;
 
-import base.BaseTest;
+import saleforce.base.BaseTest;
 import org.testng.annotations.Test;
 import salesforce.ui.pages.HomePage;
 
@@ -10,8 +10,6 @@ public class LoginTests extends BaseTest {
 
     @Test
     public void testLoginInTheWebPage() {
-        HomePage homePage = loginPage.setUserName(getEnvVariables("USER"))
-                .setPassword(getEnvVariables("PASSWORD"))
-                .clickLoginBtn();
+        HomePage homePage = loginPage.loginSuccessful(getEnvVariables("USER"), getEnvVariables("PASSWORD"));
     }
 }

@@ -183,6 +183,17 @@ public class DateManager {
         }
         return date;
     }
+
+    /**
+     * Gets today date.
+     *
+     * @return a String with the date.
+     */
+    public String getTodayDate() {
+        Date actualDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyyHH:mm");
+        return dateFormat.format(actualDate);
+    }
 }
 
 
