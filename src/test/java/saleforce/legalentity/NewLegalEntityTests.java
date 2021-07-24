@@ -1,6 +1,6 @@
-package legalentity;
+package saleforce.legalentity;
 
-import base.BaseTest;
+import saleforce.base.BaseTest;
 import core.utils.DateManager;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -9,7 +9,7 @@ import salesforce.ui.pages.*;
 public class NewLegalEntityTests extends BaseTest {
 
     SoftAssert sa = new SoftAssert();
-    DateManager dateManager = new DateManager();;
+    DateManager dateManager = new DateManager();
     NewLegalEntityPage newLegalEntityPage;
     LegalEntityPage legalEntityPage;
     String name = "New Legal Entity" + dateManager.getTodayDate();

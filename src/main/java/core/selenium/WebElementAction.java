@@ -12,10 +12,11 @@ public class WebElementAction {
 
     private WebDriver driver;
     private WebDriverWait wait;
+    private static final int timeOutInSeconds = 30;
 
     public WebElementAction() {
         driver = DriverManager.getInstance().getDriver();
-        wait = new WebDriverWait(driver, 40);
+        wait = new WebDriverWait(driver, timeOutInSeconds);
     }
 
     /**

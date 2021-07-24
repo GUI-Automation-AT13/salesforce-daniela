@@ -1,4 +1,4 @@
-package base;
+package saleforce.base;
 
 import core.selenium.DriverManager;
 import core.utils.DateManager;
@@ -30,7 +30,6 @@ public class BaseTest {
 
     @AfterTest
     public void tearDown() {
-//        legalEntitiesPage.clickDeleteBtn();
         DriverManager.getInstance().quitDriver();
     }
 }
