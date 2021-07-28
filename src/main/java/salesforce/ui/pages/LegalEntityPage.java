@@ -1,6 +1,7 @@
 package salesforce.ui.pages;
 
 import java.util.HashMap;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -16,40 +17,31 @@ public class LegalEntityPage extends BasePage {
     @FindBy(css = "div.slds-form")
     private WebElement informationSection;
 
-    @FindBy(xpath = "//div/div/span[text()=\"Company Name\"]/../..//div//span/*")
-    private WebElement companyName;
-
     @FindBy(css = "span.uiOutputTextArea")
     private WebElement description;
+
+    @FindBy(xpath = "//h1//div//span[@class=\"uiOutputText\"]")
+    private WebElement headerEntityName;
 
     @FindBy(xpath = "//div//span[text()=\"Status\"]/../..//div//span/*")
     private WebElement status;
 
-    @FindBy(css = "a.forceOutputAddress div:nth-child(1)")
-    private WebElement street;
-
-    @FindBy(css = "a.forceOutputAddress div:nth-child(2)")
-    private WebElement cityStatePostalCode;
-
-    @FindBy(css = "a.forceOutputAddress div:nth-child(3)")
-    private WebElement country;
-
     private static final String NAMES_XPATH = "//div/div/span[text()='%s']/../..//div//span[@class=\"uiOutputText\"]";
     private static final String ADDRESS_XPATH = "a.forceOutputAddress div:nth-child(%s)";
-    private static final String entityName = "//h1//div//span[@class=\"uiOutputText\"][text()=\"%s\"]";
-    private static final HashMap<String, String> spanNames = new HashMap<>();
+    private static final String HEADER_ENTITY_NAME = "//h1//div//span[@class=\"uiOutputText\"]";
+    private static final HashMap<String, String> SPAN_NAMES = new HashMap<>();
 
     static {
-        spanNames.put("name", "Name");
-        spanNames.put("company name", "Company Name");
+        SPAN_NAMES.put("Name", "Name");
+        SPAN_NAMES.put("CompanyName", "Company Name");
     }
 
-    private static final HashMap<String, String> divAddress = new HashMap<>();
+    private static final HashMap<String, String> DIV_ADDRESS = new HashMap<>();
 
     static {
-        divAddress.put("street", "1");
-        divAddress.put("city state postalCode", "2");
-        divAddress.put("country", "3");
+        DIV_ADDRESS.put("Street", "1");
+        DIV_ADDRESS.put("CityStatePostalCode", "2");
+        DIV_ADDRESS.put("Country", "3");
     }
 
     public LegalEntityPage() {
@@ -73,31 +65,32 @@ public class LegalEntityPage extends BasePage {
     /**
      * Gets the entity name text.
      *
-     * @param nameEntity s String with the name of the entity.
      * @return a string with the entity name text.
      */
-    public String getEntityNameText(final String nameEntity) {
-        return webElementAction.getTextOfElement(driver.findElement(By.xpath(String.format(entityName, nameEntity))));
+    public String getHeaderEntityNameText() {
+        return webElementAction.getTextOfElement(headerEntityName);
     }
 
     /**
      * Gets the entity or company name text.
      *
+     * @param fieldName string with the name of the field.
      * @return a String with the entity or company name text.
      */
     public String getNamesText(final String fieldName) {
         return webElementAction.getTextOfElement(driver.findElement(By.xpath(
-                String.format(NAMES_XPATH, spanNames.get(fieldName)))));
+                String.format(NAMES_XPATH, SPAN_NAMES.get(fieldName)))));
     }
 
     /**
      * Gets the address text.
      *
+     * @param fieldName string with the name of the field.
      * @return a String with address text.
      */
     public String getAddressNamesText(final String fieldName) {
         return webElementAction.getTextOfElement(driver.findElement(By.cssSelector(
-                String.format(ADDRESS_XPATH, divAddress.get(fieldName)))));
+                String.format(ADDRESS_XPATH, DIV_ADDRESS.get(fieldName)))));
     }
 
     /**

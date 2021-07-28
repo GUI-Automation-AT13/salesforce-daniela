@@ -27,9 +27,9 @@ public class NewLegalEntityTests extends BaseTest {
     @Test
     public void testCreateLegalEntityWithRequiredFields() {
         newLegalEntityPage = legalEntitiesPage.clickNewBtn();
-        legalEntityPage = newLegalEntityPage.setInputField("name", name).clickSaveBtn();
+        legalEntityPage = newLegalEntityPage.setInputField("Name", name).clickSaveBtn();
         String expectedMessage = legalEntityPage.getUserSuccessMessage();
-        String expectedName = legalEntityPage.getEntityNameText(name);
+        String expectedName = legalEntityPage.getHeaderEntityNameText();
         //Verify success message
         sa.assertEquals(expectedMessage, "success\nLegal Entity \"" + name + "\" was created.\nClose", "Message is incorrect");
         //Verify Legal Entity field (name)
@@ -44,21 +44,21 @@ public class NewLegalEntityTests extends BaseTest {
     @Test
     public void testCreateLegalEntityWithFullFields() {
         newLegalEntityPage = legalEntitiesPage.clickNewBtn();
-        legalEntityPage = newLegalEntityPage.setInputField("name", nameComplete)
-                .setInputField("company name", company).setStreetTxtBox(street)
-                .setDescriptionTxtBox(description).setInputField("city", city)
-                .setInputField("state", state).setInputField("postal code", postalCode)
-                .setInputField("country", country).selectFromDropDown("select", dropdownOption)
+        legalEntityPage = newLegalEntityPage.setInputField("Name", nameComplete)
+                .setInputField("CompanyName", company).setStreetTxtBox(street)
+                .setDescriptionTxtBox(description).setInputField("City", city)
+                .setInputField("State", state).setInputField("PostalCode", postalCode)
+                .setInputField("Country", country).selectFromDropDown("select", dropdownOption)
                 .clickSaveBtn();
         String expectedMessage = legalEntityPage.getUserSuccessMessage();
         //Verify success message
         sa.assertEquals(expectedMessage, "success\nLegal Entity \"" + nameComplete + "\" was created.\nClose", "Message is incorrect");
         //Verify Legal Entity fields (name, company name, street, address, country, description, status)
-        sa.assertEquals(nameComplete, legalEntityPage.getNamesText("name"));
-        sa.assertEquals(company, legalEntityPage.getNamesText("company name"));
-        sa.assertEquals(street, legalEntityPage.getAddressNamesText("street"));
-        sa.assertEquals(cityStatePostalCode, legalEntityPage.getAddressNamesText("city state postalCode"));
-        sa.assertEquals(country, legalEntityPage.getAddressNamesText("country"));
+        sa.assertEquals(nameComplete, legalEntityPage.getNamesText("Name"));
+        sa.assertEquals(company, legalEntityPage.getNamesText("CompanyName"));
+        sa.assertEquals(street, legalEntityPage.getAddressNamesText("Street"));
+        sa.assertEquals(cityStatePostalCode, legalEntityPage.getAddressNamesText("CityStatePostalCode"));
+        sa.assertEquals(country, legalEntityPage.getAddressNamesText("Country"));
         sa.assertEquals(description, legalEntityPage.getDescriptionText());
         sa.assertEquals(dropdownOption, legalEntityPage.getStatusText());
         //Go to Legal Entities Page

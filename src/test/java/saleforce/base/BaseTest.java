@@ -2,6 +2,7 @@ package saleforce.base;
 
 import core.selenium.DriverManager;
 import core.utils.DateManager;
+import org.openqa.selenium.JavascriptExecutor;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import salesforce.ui.PageTransporter;
@@ -18,11 +19,13 @@ public class BaseTest {
     protected LoginPage loginPage;
     protected PageTransporter pageTransporter;
     protected LegalEntitiesPage legalEntitiesPage;
+    protected JavascriptExecutor javascriptExecutor;
 
     @BeforeTest
     public void beforeClass() {
         pageTransporter = new PageTransporter();
         driverManager = DriverManager.getInstance();
+        javascriptExecutor = (JavascriptExecutor) driverManager;
         loginPage = pageTransporter.navigateToLoginPage();
         homePage = loginPage.loginSuccessful(getEnvVariables("USER"), getEnvVariables("PASSWORD"));
         legalEntitiesPage = pageTransporter.navigateToLegalEntityPage();

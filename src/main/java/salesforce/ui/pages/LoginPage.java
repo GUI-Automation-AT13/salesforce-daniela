@@ -59,9 +59,12 @@ public class LoginPage extends BasePage {
      * @return the home page.
      */
     public HomePage loginSuccessful(final String userName, final String password) {
-        setUserName(userName);
-        setPassword(password);
-        clickLoginBtn();
+        if ((Boolean) javascriptExecutor.executeScript("return (document.querySelector(\'#theloginform\') && " +
+                "document.querySelector(\'#theloginform\').offsetHeight !== 0)")) {
+            setUserName(userName);
+            setPassword(password);
+            clickLoginBtn();
+        }
         return new HomePage();
     }
 }

@@ -28,7 +28,7 @@ public class LegalEntitiesPage extends BasePage {
     @FindBy(css = ".slds-theme--success")
     private WebElement successMessage;
 
-    private static final String tableEntity = "//div[contains(@class, 'slds-table--edit_container')]//a[@title='%s']";
+    private static final String TABLE_ENTITY = "//div[contains(@class, 'slds-table--edit_container')]//a[@title='%s']";
 
     @Override
     protected void waitForPageLoaded() {
@@ -53,7 +53,7 @@ public class LegalEntitiesPage extends BasePage {
      */
     public String getTableEntity(final String tableEntityName) {
         return webElementAction.getTextOfElement(driver.findElement(By.xpath(
-                String.format(tableEntity, tableEntityName))));
+                String.format(TABLE_ENTITY, tableEntityName))));
     }
 
     /**
