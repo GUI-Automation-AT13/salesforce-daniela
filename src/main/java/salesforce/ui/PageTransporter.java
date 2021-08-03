@@ -1,10 +1,10 @@
 package salesforce.ui;
 
-import static salesforce.configuration.ConfigurationFile.getEnvVariables;
+import static salesforce.Configuration.ConfigurationFile.getEnvVariables;
 
 import core.selenium.DriverManager;
-import salesforce.configuration.ConfigurationFile;
-import salesforce.configuration.Url;
+import salesforce.Configuration.ConfigurationFile;
+import salesforce.Configuration.Ui.Url;
 import salesforce.ui.pages.LegalEntitiesPage;
 import salesforce.ui.pages.LoginPage;
 
@@ -31,7 +31,7 @@ public class PageTransporter {
      */
     public static void navigateToUrlByPageName(final String page) {
         // get the url with the name
-        String baseUrl = getEnvVariables("BASE_URL");
+        String baseUrl = Url.BASE_URL.get();
         goToUrl(baseUrl.concat(String.format(Url.FEATURE_URL.get(), page)));
     }
 

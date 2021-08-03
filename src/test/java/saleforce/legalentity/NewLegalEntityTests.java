@@ -21,13 +21,13 @@ public class NewLegalEntityTests extends BaseTest {
     String state = "The state";
     String postalCode = "0023";
     String country = "Boolivia";
-    String dropdownOption = "Active";
+    String dropdownOption = "Activa";
     String cityStatePostalCode = city + ", " + state + " " + postalCode;
 
     @Test
     public void testCreateLegalEntityWithRequiredFields() {
         newLegalEntityPage = legalEntitiesPage.clickNewBtn();
-        legalEntityPage = newLegalEntityPage.setInputField("Name", name).clickSaveBtn();
+        legalEntityPage = newLegalEntityPage.setInputFieldWithInternationalization("Name", name).clickSaveBtn();
         String expectedMessage = legalEntityPage.getUserSuccessMessage();
         String expectedName = legalEntityPage.getHeaderEntityNameText();
         //Verify success message
@@ -44,11 +44,11 @@ public class NewLegalEntityTests extends BaseTest {
     @Test
     public void testCreateLegalEntityWithFullFields() {
         newLegalEntityPage = legalEntitiesPage.clickNewBtn();
-        legalEntityPage = newLegalEntityPage.setInputField("Name", nameComplete)
-                .setInputField("CompanyName", company).setStreetTxtBox(street)
-                .setDescriptionTxtBox(description).setInputField("City", city)
-                .setInputField("State", state).setInputField("PostalCode", postalCode)
-                .setInputField("Country", country).selectFromDropDown("select", dropdownOption)
+        legalEntityPage = newLegalEntityPage.setInputFieldWithInternationalization("Name", nameComplete)
+                .setInputFieldWithInternationalization("CompanyName", company).setStreetTxtBox(street)
+                .setDescriptionTxtBox(description).setInputFieldByClass("City", city)
+                .setInputFieldByClass("State", state).setInputFieldByClass("PostalCode", postalCode)
+                .setInputFieldByClass("Country", country).selectFromDropDown("select", dropdownOption)
                 .clickSaveBtn();
         String expectedMessage = legalEntityPage.getUserSuccessMessage();
         //Verify success message

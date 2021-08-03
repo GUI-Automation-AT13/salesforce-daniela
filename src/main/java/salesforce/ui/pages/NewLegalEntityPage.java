@@ -2,44 +2,68 @@ package salesforce.ui.pages;
 
 import java.util.HashMap;
 import java.util.Set;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import salesforce.entities.LegalEntity;
+
+import static salesforce.utils.Internationalization.translate;
 
 /**
  * Interacts with the New Legal Entity elements.
  */
 public class NewLegalEntityPage extends BasePage {
 
-    @FindBy(xpath = "//button[@title=\"Save\"]")
-    private WebElement saveBtn;
-
-    @FindBy(xpath = "//div/textarea[@placeholder=\"Street\"]")
-    private WebElement streetTxtBox;
-
     @FindBy(xpath = "//div/textarea[@class=\" textarea\"]")
     private WebElement descriptionTxtBox;
 
-    private HashMap<String, Runnable> strategyMap;
-    private static final String INPUT_XPATH = "//label/span[text()='%s']/../..//input";
+    private By saveBtnXpath = By.xpath("//button[@title='" + translate("button.save") + "']");
+    private By streetTxtBoxXpath = By.xpath("//div/textarea[@placeholder='" + translate("input.street") + "']");
+
+    private static final String INTERNATIONALIZED_NAME = translate("input.name");
+    private static final String INTERNATIONALIZED_COMPANY_NAME = translate("input.companyname");
+
+    private static final String INPUT_ADDRESS_CSS = "input.%s";
     private static final String DROPDOWN_XPATH = "//a[@class='%s']";
+    private static final String INPUT_XPATH = "//label/span[text()='%s']/../..//input";
     private static final String DROPDOWN_OPTION_XPATH = "//div[@class=\"select-options\"]//a[@title='%s']";
+
     private static final HashMap<String, String> INPUT_FIELDS_NAMES = new HashMap<>();
 
     static {
-        INPUT_FIELDS_NAMES.put("Name", "Name");
-        INPUT_FIELDS_NAMES.put("CompanyName", "Company Name");
-        INPUT_FIELDS_NAMES.put("City", "City");
-        INPUT_FIELDS_NAMES.put("State", "State");
-        INPUT_FIELDS_NAMES.put("PostalCode", "Postal Code");
-        INPUT_FIELDS_NAMES.put("Country", "Country");
+        INPUT_FIELDS_NAMES.put("Name", INTERNATIONALIZED_NAME);
+        INPUT_FIELDS_NAMES.put("CompanyName", INTERNATIONALIZED_COMPANY_NAME);
+
     }
 
+    private static final HashMap<String, String> INPUT_ADDRESS_NAMES = new HashMap<>();
+
+    static {
+        INPUT_ADDRESS_NAMES.put("City", "city");
+        INPUT_ADDRESS_NAMES.put("State", "state");
+        INPUT_ADDRESS_NAMES.put("PostalCode", "postalCode");
+        INPUT_ADDRESS_NAMES.put("Country", "country");
+    }
+
+    /**
+     * Waits for the visibility of a web element.
+     */
     @Override
     protected void waitForPageLoaded() {
-        webElementAction.waitForVisibilityOfElement(streetTxtBox);
+        webElementAction.waitForVisibilityOfElement(descriptionTxtBox);
+    }
+
+    /**
+     * Sets the inputs fields that need internationalization.
+     *
+     * @param fieldName the name field to set.
+     * @param value     the value of the field.
+     * @return a NewLegalEntityPage.
+     */
+    public NewLegalEntityPage setInputFieldWithInternationalization(final String fieldName, final String value) {
+        webElementAction.setTextInputField(driver.findElement(By.xpath(
+                String.format(INPUT_XPATH, INPUT_FIELDS_NAMES.get(fieldName)))), value);
+        return this;
     }
 
     /**
@@ -47,11 +71,11 @@ public class NewLegalEntityPage extends BasePage {
      *
      * @param fieldName the name field to set.
      * @param value     the value of the field.
-     * @return a NewLegalEntity.
+     * @return a NewLegalEntityPage.
      */
-    public NewLegalEntityPage setInputField(final String fieldName, final String value) {
-        webElementAction.setTextInputField(driver.findElement(By.xpath(
-                String.format(INPUT_XPATH, INPUT_FIELDS_NAMES.get(fieldName)))), value);
+    public NewLegalEntityPage setInputFieldByClass(final String fieldName, final String value) {
+        webElementAction.setTextInputField(driver.findElement(By.cssSelector(
+                String.format(INPUT_ADDRESS_CSS, INPUT_ADDRESS_NAMES.get(fieldName)))), value);
         return this;
     }
 
@@ -75,7 +99,7 @@ public class NewLegalEntityPage extends BasePage {
      * @return a NewLegalEntityPage
      */
     public NewLegalEntityPage setStreetTxtBox(final String street) {
-        webElementAction.setTextInputField(streetTxtBox, street);
+        webElementAction.setTextInputField(driver.findElement(streetTxtBoxXpath), street);
         return this;
     }
 
@@ -96,7 +120,7 @@ public class NewLegalEntityPage extends BasePage {
      * @return A LegalEntityPage.
      */
     public LegalEntityPage clickSaveBtn() {
-        webElementAction.clickElement(saveBtn);
+        webElementAction.clickElement(driver.findElement(saveBtnXpath));
         return new LegalEntityPage();
     }
 
@@ -104,27 +128,23 @@ public class NewLegalEntityPage extends BasePage {
      * Builds the legal entity map with given fields.
      *
      * @param legalEntity with given fields.
+     * @return the built map.
      */
-    private void buildMap(final LegalEntity legalEntity) {
-        strategyMap = new HashMap<>();
-        strategyMap.put("Name", () -> setInputField("Name", legalEntity.getName()));
-        strategyMap.put("CompanyName", () -> setInputField("CompanyName", legalEntity.getCompanyName()));
-        strategyMap.put("LegalEntityCity", () -> setInputField("City", legalEntity.getLegalEntityCity()));
-        strategyMap.put("LegalEntityState", () -> setInputField("State", legalEntity.getLegalEntityState()));
-        strategyMap.put("LegalEntityPostalCode", () -> setInputField("PostalCode", legalEntity.getLegalEntityPostalCode()));
-        strategyMap.put("LegalEntityCountry", () -> setInputField("Country", legalEntity.getLegalEntityCountry()));
+    private HashMap<String, Runnable> buildMap(final LegalEntity legalEntity) {
+        HashMap<String, Runnable> strategyMap = new HashMap<>();
+        strategyMap.put("Name", () -> setInputFieldWithInternationalization("Name", legalEntity.getName()));
+        strategyMap.put("CompanyName", () -> setInputFieldWithInternationalization("CompanyName",
+                legalEntity.getCompanyName()));
+        strategyMap.put("LegalEntityState", () -> setInputFieldByClass("State", legalEntity.getLegalEntityState()));
+        strategyMap.put("LegalEntityCity", () -> setInputFieldByClass("City", legalEntity.getLegalEntityCity()));
+        strategyMap.put("LegalEntityPostalCode", () -> setInputFieldByClass("PostalCode",
+                legalEntity.getLegalEntityPostalCode()));
+        strategyMap.put("LegalEntityCountry", () -> setInputFieldByClass("Country",
+                legalEntity.getLegalEntityCountry()));
         strategyMap.put("LegalEntityStreet", () -> setStreetTxtBox(legalEntity.getLegalEntityStreet()));
         strategyMap.put("Description", () -> setDescriptionTxtBox(legalEntity.getDescription()));
         strategyMap.put("Status", () -> selectFromDropDown("select", legalEntity.getStatus()));
-    }
-
-    /**
-     * Gets the name of the legal entity.
-     *
-     * @return a string with the name.
-     */
-    public String getName() {
-        return String.valueOf(strategyMap.get("Name"));
+        return strategyMap;
     }
 
     /**
@@ -135,10 +155,9 @@ public class NewLegalEntityPage extends BasePage {
      * @return a legal entity page.
      */
     public LegalEntityPage createLegalEntity(final Set<String> fields, final LegalEntity legalEntity) {
-        // Componer el mapa
-        buildMap(legalEntity);
-        // Llenar el formulario
-        fields.forEach(field -> strategyMap.get(field).run());
+        HashMap<String, Runnable> map = buildMap(legalEntity);
+        fields.forEach(field -> map.get(field).run());
         return clickSaveBtn();
     }
+
 }

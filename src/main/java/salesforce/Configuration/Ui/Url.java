@@ -1,4 +1,4 @@
-package salesforce.configuration;
+package salesforce.Configuration.Ui;
 
 public enum Url {
 
@@ -7,12 +7,12 @@ public enum Url {
 
     private String value;
 
-    Url(final String value) {
-        this.value = value;
+    Url(final String incomingValue) {
+        this.value = incomingValue;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setValue(final String incomingValue) {
+        this.value = incomingValue;
     }
 
     public String get() {

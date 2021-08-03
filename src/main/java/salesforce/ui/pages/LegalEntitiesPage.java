@@ -4,7 +4,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-
 /**
  * Interacts with the Legal Entity elements.
  */
@@ -16,20 +15,15 @@ public class LegalEntitiesPage extends BasePage {
     @FindBy(css = "table.slds-table")
     private WebElement entitiesTable;
 
-    @FindBy(css = "tr:nth-child(1) .slds-icon_container > span:nth-child(1)")
-    private WebElement arrowMenuIcon;
-
-    @FindBy(xpath = "//div[contains(@class, 'popupTargetContainer')]//a[@title=\"Delete\"]")
-    private WebElement deleteOption;
-
-    @FindBy(xpath = "//button[@title=\"Delete\"]")
-    private WebElement deleteBtn;
-
     @FindBy(css = ".slds-theme--success")
     private WebElement successMessage;
 
     private static final String TABLE_ENTITY = "//div[contains(@class, 'slds-table--edit_container')]//a[@title='%s']";
+    private String legalEntityNumberCellXpath = "//table//*[@title='%s']";
 
+    /**
+     * Waits for the visibility of a web element.
+     */
     @Override
     protected void waitForPageLoaded() {
         webElementAction.waitForVisibilityOfElement(entitiesTable);
@@ -57,15 +51,14 @@ public class LegalEntitiesPage extends BasePage {
     }
 
     /**
-     * Clicks the delete button.
+     * Gets the legal entity id.
      *
-     * @return a LegalEntityPage.
+     * @param name a String with the value
+     * @return the case id
      */
-    public LegalEntitiesPage clickDeleteBtn() {
-        webElementAction.clickElement(arrowMenuIcon);
-        webElementAction.clickElement(deleteOption);
-        webElementAction.clickElement(deleteBtn);
-        return new LegalEntitiesPage();
+    public String getLegalEntityId(final String name) {
+        return webElementAction.getAttributeFromWebElement(driver.findElement(
+                By.xpath(String.format(legalEntityNumberCellXpath, name))),
+                "data-recordid");
     }
-
 }

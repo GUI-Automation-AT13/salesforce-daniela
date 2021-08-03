@@ -2,98 +2,79 @@ package cucumber.steps;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import core.selenium.DriverManager;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.testng.asserts.SoftAssert;
+import salesforce.entities.CreatedResponse;
 import salesforce.entities.LegalEntity;
-import salesforce.ui.PageTransporter;
+import salesforce.entities.RequisiteElement;
 import salesforce.ui.pages.*;
-
 import java.util.Map;
-
-import static salesforce.configuration.ConfigurationFile.getEnvVariables;
+import static salesforce.Configuration.ConfigurationFile.getEnvVariables;
 
 public class LegalEntitySteps {
 
-    // Pages
-    LegalEntitiesPage legalEntitiesPage;
-    NewLegalEntityPage newLegalEntityPage;
-    DriverManager driverManager;
+    private Logger logger = LogManager.getLogger(getClass());
+    SoftAssert softAssert = new SoftAssert();
     LegalEntity legalEntity;
-    LegalEntityPage legalEntityPage;
-    Map<String, String> tableData;
-    protected HomePage homePage;
-    protected LoginPage loginPage;
-    protected PageTransporter pageTransporter;
+    CreatedResponse createdResponse;
+    RequisiteElement requisiteElement;
 
-    @Before
-    public void beforeClass() {
-        pageTransporter = new PageTransporter();
-        driverManager = DriverManager.getInstance();
-        loginPage = pageTransporter.navigateToLoginPage();
+    public LegalEntitySteps(final CreatedResponse createdResponse, final RequisiteElement requisiteElement, LegalEntity legalEntity) {
+        this.createdResponse = createdResponse;
+        this.requisiteElement = requisiteElement;
+        this.legalEntity = legalEntity;
     }
 
-    @After
-    public void tearDown() {
-        DriverManager.getInstance().quitDriver();
+    @Given("^I login to Salesforce site as an admin user$")
+    public void iLoginToSalesforceSiteAsAnAdminUser() {
+        logger.info("=================== Given I login to Salesforce site ==========================");
+        LoginPage loginPage = new LoginPage();
+        HomePage homePage = loginPage.loginSuccessful(getEnvVariables("USER"), getEnvVariables("PASSWORD"));
     }
 
-    @Given("^I login to Salesforce site as an? (.*?) user$")
-    public void iLoginToSalesforceSiteAsAnUser(final String userType) {
-            homePage = loginPage.loginSuccessful(getEnvVariables("USER"), getEnvVariables("PASSWORD"));
-        //get user credentials
-        //login by ui if user is not logged in
-
+    @When("^I create a new LegalEntity with fields$")
+    public void iCreateAnNewLegalEntityWithFields(final Map<String, String> table) throws JsonProcessingException {
+        logger.info("=================== When I create a new legal entity ==========================");
+        String json = new ObjectMapper().writeValueAsString(table);
+        legalEntity.setEntity(new ObjectMapper().readValue(json, LegalEntity.class));
+        LegalEntitiesPage legalEntitiesPage = new LegalEntitiesPage();
+        NewLegalEntityPage newLegalEntityPage = legalEntitiesPage.clickNewBtn();
+        newLegalEntityPage.createLegalEntity(table.keySet(), legalEntity);
     }
 
-    @When("^I create a new (.*?) with fields$")
-    public void iCreateAnNewFeatureWithFields(final String feature, final Map<String, String> table) throws JsonProcessingException {
-        // setear la entidad
-        tableData = table;
-        String json = new ObjectMapper().writeValueAsString(tableData);
-        legalEntity = new ObjectMapper().readValue(json, LegalEntity.class);
-        // crear el Legal Entity por UI
-        legalEntitiesPage = new LegalEntitiesPage();
-        newLegalEntityPage = legalEntitiesPage.clickNewBtn();
-        newLegalEntityPage.createLegalEntity(tableData.keySet(), legalEntity);
+    @Then("A successful message should be displayed")
+    public void aSuccessfulMessageShouldBeDisplayed() {
+        logger.info("=================== Then A successful message should be displayed ==========================");
+        LegalEntityPage legalEntityPage  = new LegalEntityPage();
+        boolean message = legalEntityPage.getUserSuccessMessage().contains(legalEntity.getName());
+        softAssert.assertTrue(message, "Message is incorrect");
     }
 
-    @Then("A successful message is displayed")
-    public void aSuccessfulMessageIsDisplayed() {
-        SoftAssert softAssert = new SoftAssert();
-        legalEntityPage  = new LegalEntityPage();
-        String expectedMessage = legalEntityPage.getUserSuccessMessage();
-        softAssert.assertEquals(expectedMessage, "success\nLegal Entity \"" + legalEntity.getName()
-                + "\" was created.\nClose", "Message is incorrect");
+    @And("The header name should match in the created legal entity page")
+    public void theHeaderNameShouldMatchInTheCreatedLegalEntityPage() {
+        logger.info("=================== And The header name should match ==========================");
+        LegalEntityPage legalEntityPage = new LegalEntityPage();
+        softAssert.assertEquals(legalEntity.getName(), legalEntityPage.getHeaderEntityNameText(), "Header name is incorrect");
+    }
+
+    @And("All given details fields should match in the created legal entity page")
+    public void allGivenDetailsFieldsShouldMatchesInTheCreatedLegalEntityPage() {
+        logger.info("=================== And All the given details fields should match ==========================");
+        LegalEntityPage legalEntityPage = new LegalEntityPage();
+        softAssert.assertEquals(legalEntity.summaryMap(), legalEntityPage.entityMap(), "Fields doesn't match");
         softAssert.assertAll();
     }
 
-    @And("The title matches")
-    public void theTitleMatches() {
-        SoftAssert softAssert = new SoftAssert();
-        String expectedTitle = legalEntityPage.getHeaderEntityNameText();
-        softAssert.assertEquals(expectedTitle, legalEntityPage.getHeaderEntityNameText(), "Header name is incorrect");
-        softAssert.assertAll();
-    }
-
-    @And("All given details fields matches")
-    public void allGivenDetailsFieldsMatches() {
-        SoftAssert softAssert = new SoftAssert();
-        legalEntityPage = new LegalEntityPage();
-        softAssert.assertEquals(legalEntityPage.getNamesText("Name"), legalEntity.getName());
-        softAssert.assertEquals(legalEntityPage.getNamesText("CompanyName"), legalEntity.getCompanyName());
-        softAssert.assertEquals(legalEntityPage.getAddressNamesText("Street"), legalEntity.getLegalEntityStreet());
-        softAssert.assertTrue(legalEntityPage.getAddressNamesText("CityStatePostalCode").contains(legalEntity.getLegalEntityCity()));
-        softAssert.assertTrue(legalEntityPage.getAddressNamesText("CityStatePostalCode").contains(legalEntity.getLegalEntityState()));
-        softAssert.assertTrue(legalEntityPage.getAddressNamesText("CityStatePostalCode").contains(legalEntity.getLegalEntityPostalCode()));
-        softAssert.assertEquals(legalEntityPage.getAddressNamesText("Country"), legalEntity.getLegalEntityCountry());
-        softAssert.assertEquals(legalEntityPage.getDescriptionText(), legalEntity.getDescription());
-        softAssert.assertEquals(legalEntityPage.getStatusText(), legalEntity.getStatus());
+    @Then("The created legal entity should be displayed on the legal entities table")
+    public void theCreatedLegalEntityShouldBeDisplayedOnTheLegalEntitiesTable() {
+        logger.info("=================== Then The created legal entity should be on table ==========================");
+        LegalEntitiesPage legalEntitiesPage = new LegalEntitiesPage();
+        legalEntity.setId(legalEntitiesPage.getLegalEntityId(legalEntity.getName()));
         softAssert.assertAll();
     }
 

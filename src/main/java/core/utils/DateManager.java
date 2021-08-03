@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
 import org.openqa.selenium.InvalidArgumentException;
 
 /**
@@ -13,6 +14,8 @@ import org.openqa.selenium.InvalidArgumentException;
 public class DateManager {
 
     private Calendar today;
+    private static final int PASSED_DATE_LENGTH = 3;
+    private static final int FUTURE_DATE_LENGTH = 4;
 
     /**
      * Adds the format to the date.
@@ -20,7 +23,7 @@ public class DateManager {
      * @param calendarDate obtained calendar date.
      * @return a date.
      */
-    public Date addFormatDate(Calendar calendarDate) {
+    public Date addFormatDate(final Calendar calendarDate) {
         DateFormat parser = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Date date;
         try {
@@ -37,7 +40,7 @@ public class DateManager {
      * @param stringDate a string date.
      * @return a date.
      */
-    public Date getDate(String stringDate) {
+    public Date getDate(final String stringDate) {
         if (stringDate == null) {
             throw new NullPointerException("Invalid Argument: Unsupported String Format.");
         } else if (stringDate.equals("")) {
@@ -69,7 +72,7 @@ public class DateManager {
      * @param date a string with the date to find.
      * @return a date.
      */
-    private Date oneDateGroup(String date) {
+    private Date oneDateGroup(final String date) {
         today = Calendar.getInstance();
         if (date.equals("TODAY")) {
             return addFormatDate(today);
@@ -91,10 +94,10 @@ public class DateManager {
      * @param date a string with the date to find.
      * @return a date.
      */
-    private Date passedDateGroup(String date) {
+    private Date passedDateGroup(final String date) {
         int number;
         String[] result = date.trim().split(" ");
-        if (result.length == 3) {
+        if (result.length == PASSED_DATE_LENGTH) {
             try {
                 number = (Integer.parseInt(result[0]));
             } catch (IllegalArgumentException e) {
@@ -112,10 +115,10 @@ public class DateManager {
      * @param date a string with the date to find.
      * @return a date.
      */
-    private Date futureDateGroup(String date) {
+    private Date futureDateGroup(final String date) {
         int number;
         String[] result = date.trim().split(" ");
-        if (result.length == 4) {
+        if (result.length == FUTURE_DATE_LENGTH) {
             try {
                 number = (Integer.parseInt(result[0]));
             } catch (IllegalArgumentException e) {
@@ -134,7 +137,7 @@ public class DateManager {
      * @param number   the amount to change.
      * @return a date.
      */
-    private Date separateUnits(String timeUnit, int number) {
+    private Date separateUnits(final String timeUnit, final int number) {
         today = Calendar.getInstance();
         if (timeUnit.matches("second|seconds")) {
             today.add(Calendar.SECOND, number);
@@ -173,7 +176,7 @@ public class DateManager {
      * @param dateString a string with the date to find.
      * @return a date.
      */
-    private Date simpleDateGroup(String dateString) {
+    private Date simpleDateGroup(final String dateString) {
         DateFormat parser = new SimpleDateFormat("MM/dd/yyyy");
         Date date;
         try {

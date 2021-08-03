@@ -1,5 +1,6 @@
 package salesforce.ui.pages;
 
+import core.utils.EncryptorAES;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -16,6 +17,9 @@ public class LoginPage extends BasePage {
 
     @FindBy(id = "Login")
     private WebElement loginBtn;
+
+    EncryptorAES encryptorAES;
+    private String key = "error404";
 
     @Override
     protected void waitForPageLoaded() {
@@ -59,10 +63,11 @@ public class LoginPage extends BasePage {
      * @return the home page.
      */
     public HomePage loginSuccessful(final String userName, final String password) {
-        if ((Boolean) javascriptExecutor.executeScript("return (document.querySelector(\'#theloginform\') && " +
-                "document.querySelector(\'#theloginform\').offsetHeight !== 0)")) {
-            setUserName(userName);
-            setPassword(password);
+        encryptorAES = new EncryptorAES();
+        if ((Boolean) javascriptExecutor.executeScript("return (document.querySelector(\'#theloginform\') && "
+                + "document.querySelector(\'#theloginform\').offsetHeight !== 0)")) {
+            setUserName(encryptorAES.getDecryptedValue(userName, key));
+            setPassword(encryptorAES.getDecryptedValue(password, key));
             clickLoginBtn();
         }
         return new HomePage();

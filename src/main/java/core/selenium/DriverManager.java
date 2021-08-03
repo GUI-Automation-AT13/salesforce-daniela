@@ -4,14 +4,14 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import io.github.bonigarcia.wdm.config.DriverManagerType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import salesforce.configuration.ConfigurationFile;
+import salesforce.Configuration.ConfigurationFile;
 
 /**
  * Manages and initializes the browser drivers.
  */
 public class DriverManager {
 
-    public WebDriver driver = null;
+    public WebDriver driver;
     public DriverConfig driverConfig = DriverConfig.getInstance();
     public static DriverManager driverManager;
     public WebDriverWait webDriverWait;
@@ -28,6 +28,7 @@ public class DriverManager {
     public static DriverManager getInstance() {
         if (driverManager == null) {
             driverManager = new DriverManager();
+            System.out.println("=======================> " + driverManager);
         }
         return driverManager;
     }
@@ -46,6 +47,7 @@ public class DriverManager {
     public void quitDriver() {
         driver.quit();
         driver = null;
+        driverManager = null;
     }
 
     public WebDriver getDriver() {
