@@ -75,6 +75,8 @@ public class LegalEntitySteps {
         logger.info("=================== Then The created legal entity should be on table ==========================");
         LegalEntitiesPage legalEntitiesPage = new LegalEntitiesPage();
         legalEntity.setId(legalEntitiesPage.getLegalEntityId(legalEntity.getName()));
+        softAssert.assertEquals(legalEntitiesPage.getTableEntity(legalEntity.getName()), legalEntity.getName(),
+                "The name is incorrect");
         softAssert.assertAll();
     }
 

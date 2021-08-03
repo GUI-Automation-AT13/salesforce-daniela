@@ -2,6 +2,7 @@ package salesforce.entities;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -531,8 +532,9 @@ public class LegalEntity {
     }
 
     /**
-     * .
-     * @param legalEntity .
+     * Sets the obtained legal entity from table.
+     *
+     * @param legalEntity the legal entity to be set.
      */
     public void setEntity(final LegalEntity legalEntity) {
         name = legalEntity.getName();
