@@ -1,4 +1,4 @@
-package salesforce.configuration;
+package salesforce.Configuration;
 
 import java.io.File;
 import java.io.FileInputStream;

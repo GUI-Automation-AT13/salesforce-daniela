@@ -12,10 +12,19 @@ repositories {
 }
 
 dependencies {
+    implementation 'io.rest-assured:rest-assured:4.4.0'
     implementation 'org.seleniumhq.selenium:selenium-java:3.141.59'
     implementation 'io.github.bonigarcia:webdrivermanager:4.4.3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.12.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+    implementation 'org.testng:testng:7.4.0'
     implementation 'org.pitest:pitest:1.6.7'
-    testImplementation 'org.testng:testng:7.4.0'
+    implementation 'log4j:log4j:1.2.17'
+    implementation 'org.slf4j:slf4j-simple:1.7.30'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    testCompile 'io.cucumber:cucumber-java:6.10.4'
+    testCompile 'io.cucumber:cucumber-picocontainer:6.10.4'
+    testCompile 'io.cucumber:cucumber-testng:6.10.4'
 }
 
 test {
@@ -25,14 +34,14 @@ test {
 checkstyle {
     toolVersion '8.44'
     configFile file('config/checkstyle/checkstyle.xml')
-    checkstyleMain.source = "src/main/"
-    checkstyleMain.excludes = ["**/src/test/**"]
+    checkstyleMain.source = "src/*"
+//    checkstyleMain.excludes = ["**/src/test/**"]
 }
 checkstyleMain {
-    source = 'src/main/java'
+    source = 'src/*'
 }
 checkstyleTest {
-    source = 'src/main/java'
+    source = 'src/*'
 }
 check.dependsOn build
 test.finalizedBy("checkstyleMain")

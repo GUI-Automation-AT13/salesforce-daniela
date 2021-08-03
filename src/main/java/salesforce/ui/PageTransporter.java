@@ -1,10 +1,10 @@
 package salesforce.ui;
 
-import static salesforce.configuration.ConfigurationFile.getEnvVariables;
+import static salesforce.Configuration.ConfigurationFile.getEnvVariables;
 
 import core.selenium.DriverManager;
-import salesforce.configuration.ConfigurationFile;
-import salesforce.ui.pages.HomePage;
+import salesforce.Configuration.ConfigurationFile;
+import salesforce.Configuration.Ui.Url;
 import salesforce.ui.pages.LegalEntitiesPage;
 import salesforce.ui.pages.LoginPage;
 
@@ -20,8 +20,19 @@ public class PageTransporter {
      *
      * @param url string with the url.
      */
-    public void goToUrl(final String url) {
+    public static void goToUrl(final String url) {
         DriverManager.getInstance().getDriver().navigate().to(url);
+    }
+
+    /**
+     * Navigates to an url by it's page name.
+     *
+     * @param page String with page.
+     */
+    public static void navigateToUrlByPageName(final String page) {
+        // get the url with the name
+        String baseUrl = Url.BASE_URL.get();
+        goToUrl(baseUrl.concat(String.format(Url.FEATURE_URL.get(), page)));
     }
 
     /**
@@ -32,16 +43,6 @@ public class PageTransporter {
     public LegalEntitiesPage navigateToLegalEntityPage() {
         goToUrl(baseUrl.concat(ConfigurationFile.getEnvVariables("ENTITIES_URL")));
         return new LegalEntitiesPage();
-    }
-
-    /**
-     * Navigates to the Legal entities page.
-     *
-     * @return a LegalEntityPage.
-     */
-    public HomePage navigateToLegalHomePage() {
-        goToUrl(baseUrl);
-        return new HomePage();
     }
 
     /**
